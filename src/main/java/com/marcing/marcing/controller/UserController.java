@@ -20,11 +20,11 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<Long> login(
             @RequestBody LoginRequest loginRequest) {
-
+        log.info("Logging... {}", loginRequest.getEmail());
         return ResponseEntity.ok(userService.login(loginRequest));
     }
 
-//    @GetMapping("/getMyProject")
+    //    @GetMapping("/getMyProject")
 //    @ResponseStatus(HttpStatus.OK)
 //    public ResponseEntity<Project> chooseProject(
 //            @RequestBody Long userId) {
@@ -34,7 +34,7 @@ public class UserController {
 //        return ResponseEntity.ok(project);
 //    }
     @PostMapping("/register")
-    public ResponseEntity<Long> registerUser(@RequestBody RegisterRequest registerRequest){
+    public ResponseEntity<Long> registerUser(@RequestBody RegisterRequest registerRequest) {
         return ResponseEntity.ok(userService.register(registerRequest));
     }
 

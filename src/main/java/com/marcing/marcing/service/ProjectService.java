@@ -7,6 +7,8 @@ import com.marcing.marcing.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,13 +24,17 @@ public class ProjectService {
     }
 
     public void chooseProject(Long id, Long userId) {
+
+
         Optional<User> user = userRepository.findById(userId);
         Optional<Project> project = projectRepository.findById(id);
-        if (user.isPresent() && project.isPresent()) {
-            user.get().setProject(project.get());
-            project.get().setIsActive(false);
-            projectRepository.save(project.get());
-            userRepository.save(user.get());
+        if (user.isPresent() && project.isPresent() && (user.get().getProject() == null)) {
+                user.get().setProject(project.get());
+                project.get().setIsActive(false);
+                project.get().setTimestamp(LocalDateTime.now());
+                projectRepository.save(project.get());
+                userRepository.save(user.get());
+
         }
     }
 
@@ -40,5 +46,17 @@ public class ProjectService {
         }
 
         return null;
+    }
+
+    public void unchooseProject(Long id, Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        Optional<Project> project = projectRepository.findById(id);
+        if (user.isPresent() && project.isPresent() && user.get().getProject() != null){
+            user.get().setProject(null);
+            userRepository.save(user.get());
+            project.get().setIsActive(true);
+            project.get().setTimestamp(null);
+            projectRepository.save(project.get());
+        }
     }
 }

@@ -38,7 +38,7 @@ public class ProjectController {
 
     @GetMapping("/getMyProject")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Project> chooseProject(
+    public ResponseEntity<Project> getMyProject(
             @RequestParam(name = "userId") Long userId) {
         log.info("Get my project for user with id = {}", userId);
 
@@ -46,4 +46,14 @@ public class ProjectController {
         return ResponseEntity.ok(project);
     }
 
+    @PostMapping("/cancel/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Void> deleteProject(
+            @PathVariable Long id,
+            @RequestParam(name = "userId") Long userId) {
+        log.info("Delete project for user with id: {}", userId);
+
+        projectService.unchooseProject(id, userId);
+        return ResponseEntity.noContent().build();
+    }
 }
