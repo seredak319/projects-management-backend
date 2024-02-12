@@ -35,6 +35,7 @@ public class UserController {
 //    }
     @PostMapping("/register")
     public ResponseEntity<Long> registerUser(@RequestBody RegisterRequest registerRequest) {
+        log.info("Registrarion... {}", registerRequest.getEmail());
         return ResponseEntity.ok(userService.register(registerRequest));
     }
 

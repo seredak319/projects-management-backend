@@ -1,5 +1,7 @@
 package com.marcing.marcing.controller;
 
+import com.marcing.marcing.dto.ProjectRequest;
+import com.marcing.marcing.dto.RegisterRequest;
 import com.marcing.marcing.model.Project;
 import com.marcing.marcing.service.ProjectService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -55,5 +58,29 @@ public class ProjectController {
 
         projectService.unchooseProject(id, userId);
         return ResponseEntity.noContent().build();
+    }
+    @PostMapping("/delete/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Void> deleteProject(
+            @PathVariable Long id){
+        projectService.deleteProject(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/edit/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Project> editProject(@RequestBody ProjectRequest projectRequest,
+            @PathVariable Long id){
+        Project project = projectService.editProject(id, projectRequest);
+        log.info("Editing project id...{}", id);
+        return ResponseEntity.ok(project);
+    }
+
+    @PostMapping("/create")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Void> editProject(@RequestBody ProjectRequest projectRequest){
+        projectService.createProject(projectRequest);
+        log.info("[{}]: Creating project... ", LocalDateTime.now());
+        return ResponseEntity.ok().build();
     }
 }
